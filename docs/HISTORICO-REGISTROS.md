@@ -52,7 +52,17 @@ Plataforma **MundialCard** (cartão de super benefícios / multibenefícios em s
 - `docs/venda-digital-escalavel.md` — jornada, métodos, B2B e KPIs
 - Este arquivo — histórico de registros para a linha do tempo no GitHub
 
+### 8. Modo responsivo (smartphones e tablets)
+
+- Correção de overflow horizontal no mobile (header, textos e seções)
+- Header mobile: apenas logo + menu hamburger (ações dentro do menu)
+- Menu hamburger com `z-index` elevado, sobreposto a todo o conteúdo e ao WhatsApp
+- Containers com padding lateral estável em todos os breakpoints
+- Carrossel, grids, formulários e vídeos adaptados para 1024px, 768px e 480px
+- Deploy na `main` para produção (Netlify)
+
 ---
+
 
 ## Estrutura principal do repositório
 
@@ -75,12 +85,14 @@ docs/
 |--------|------------|
 | `main` | Linha principal de produção / release inicial |
 | `docs/historico-registros` | Atualização e manutenção do histórico de registros no GitHub |
+| `modo-responsivo` | Registro das correções de layout mobile e tablets |
 
 ## Publicação no GitHub
 
 - Repositório: https://github.com/JorgeRamalho/Mundialcard
 - Commit inicial na `main`: release da plataforma digital completa
 - Branch `docs/historico-registros`: linha dedicada a evoluir este histórico de registros sem misturar com features de produto
+- Branch `modo-responsivo`: consolidação do modo responsivo (header, overflow, menu sobreposto)
 
 ## Contato operacional
 
