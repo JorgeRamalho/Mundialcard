@@ -76,6 +76,12 @@ docs/
 | `main` | Linha principal de produção / release inicial |
 | `docs/historico-registros` | Atualização e manutenção do histórico de registros no GitHub |
 
+## Publicação no GitHub
+
+- Repositório: https://github.com/JorgeRamalho/Mundialcard
+- Commit inicial na `main`: release da plataforma digital completa
+- Branch `docs/historico-registros`: linha dedicada a evoluir este histórico de registros sem misturar com features de produto
+
 ## Contato operacional
 
 - Site oficial: https://www.mundialcard.com.br/
