@@ -49,6 +49,7 @@
 
   --nav-h: 72px;
   --container: 1180px;
+  --carousel-height: clamp(220px, 38vw, 480px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -491,9 +492,57 @@ ul {
   position: relative;
   width: 100%;
   max-width: 100%;
-  height: clamp(180px, 36vw, 420px);
+  height: var(--carousel-height);
   overflow: hidden;
   background: var(--brand-bg-deep);
+}
+
+@media (min-width: 1025px) {
+  :root {
+    --carousel-height: clamp(520px, 45vh, 780px);
+  }
+
+  .carousel-slide img,
+  .carousel-slide--banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .carousel-slide figcaption {
+    left: 1.75rem;
+    right: 1.75rem;
+    bottom: 1.75rem;
+    max-width: min(640px, calc(100% - 3.5rem));
+  }
+
+  .carousel-slide figcaption strong {
+    font-size: clamp(1.25rem, 1.8vw, 2rem);
+  }
+
+  .carousel-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .carousel-btn-prev {
+    left: 1.15rem;
+  }
+
+  .carousel-btn-next {
+    right: 1.15rem;
+  }
+
+  .carousel-dots {
+    bottom: 1.1rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root {
+    --carousel-height: clamp(580px, 50vh, 860px);
+  }
 }
 
 .carousel-track {
@@ -506,6 +555,8 @@ ul {
   position: absolute;
   inset: 0;
   margin: 0;
+  width: 100%;
+  height: 100%;
   opacity: 0;
   transition: opacity 0.7s var(--ease);
   pointer-events: none;
@@ -529,6 +580,7 @@ ul {
   width: 100%;
   height: 100%;
   color: inherit;
+  overflow: hidden;
 }
 
 .carousel-slide--banner {
@@ -1966,6 +2018,7 @@ a.partner-card:hover {
 @media (max-width: 1024px) {
   :root {
     --nav-h: 60px;
+    --carousel-height: clamp(240px, 38vw, 360px);
   }
 
   .nav-links {
@@ -2027,13 +2080,13 @@ a.partner-card:hover {
   .sidebar h2 {
     width: 100%;
   }
-
-  .hero-carousel {
-    height: clamp(170px, 34vw, 300px);
-  }
 }
 
 @media (max-width: 768px) {
+  :root {
+    --carousel-height: clamp(190px, 42vw, 280px);
+  }
+
   .container,
   .navbar-inner {
     width: 100%;
@@ -2146,10 +2199,6 @@ a.partner-card:hover {
     transform: none;
   }
 
-  .hero-carousel {
-    height: clamp(150px, 40vw, 220px);
-  }
-
   .carousel-btn {
     width: 32px;
     height: 32px;
@@ -2221,6 +2270,7 @@ a.partner-card:hover {
 @media (max-width: 480px) {
   :root {
     --nav-h: 56px;
+    --carousel-height: clamp(175px, 48vw, 220px);
   }
 
   .container,
@@ -2234,10 +2284,6 @@ a.partner-card:hover {
 
   .brand img {
     height: 26px;
-  }
-
-  .hero-carousel {
-    height: 150px;
   }
 
   .hero.hero-compact h1,
