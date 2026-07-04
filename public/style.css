@@ -284,7 +284,7 @@ ul {
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 2000;
   height: var(--nav-h);
   display: flex;
   align-items: center;
@@ -294,6 +294,10 @@ ul {
   box-shadow: 0 4px 18px rgba(140, 20, 23, 0.06);
   width: 100%;
   max-width: 100%;
+}
+
+body.nav-open .navbar {
+  z-index: 3000;
 }
 
 .navbar-inner {
@@ -1825,7 +1829,7 @@ a.partner-card:hover {
   position: fixed;
   right: 1.1rem;
   bottom: 1.1rem;
-  z-index: 120;
+  z-index: 1500;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
@@ -1885,6 +1889,8 @@ a.partner-card:hover {
     display: grid !important;
     place-items: center;
     flex-shrink: 0;
+    position: relative;
+    z-index: 3002;
   }
 
   .nav-links.open {
@@ -1896,14 +1902,21 @@ a.partner-card:hover {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 99;
+    z-index: 3001;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     background: #ffffff;
     padding: 1rem 1.25rem 2rem;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     gap: 0.25rem;
     box-shadow: 0 16px 32px rgba(140, 20, 23, 0.12);
+  }
+
+  body.nav-open .whatsapp-float {
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .nav-links.open > a {
