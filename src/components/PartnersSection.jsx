@@ -14,29 +14,16 @@ export default function PartnersSection() {
         </div>
 
         <div className="partners-grid">
-          {partners.map((partner, index) => {
-            const isExternal = partner.url && partner.url !== "#";
-            const Tag = isExternal ? "a" : "div";
-            const linkProps = isExternal
-              ? {
-                  href: partner.url,
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                }
-              : {};
-
-            return (
-              <Tag
-                key={`${partner.name}-${index}`}
-                className="partner-card"
-                title={partner.name}
-                {...linkProps}
-              >
-                <img src={partner.logo} alt={partner.name} loading="lazy" />
-                <span>{partner.name}</span>
-              </Tag>
-            );
-          })}
+          {partners.map((partner, index) => (
+            <div
+              key={`${partner.name}-${index}`}
+              className={`partner-card${partner.brandCard ? " partner-card--brand" : ""}`}
+              title={partner.name}
+            >
+              <img src={partner.logo} alt={partner.name} loading="lazy" />
+              {!partner.brandCard && <span>{partner.name}</span>}
+            </div>
+          ))}
         </div>
       </div>
     </section>

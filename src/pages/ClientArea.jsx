@@ -27,7 +27,7 @@ export default function ClientArea() {
             </div>
             <div>
               <div style={{ opacity: 0.7, fontSize: "0.85rem" }}>Titular</div>
-              <div style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem" }}>Associado Demo</div>
+              <div style={{ fontFamily: "var(--font-display)", fontSize: "1.2rem" }}>Cliente Mundial Card</div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.9rem" }}>
               <span>**** 4821</span>

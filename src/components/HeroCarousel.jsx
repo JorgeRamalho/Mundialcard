@@ -1,22 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { assetUrl } from "../lib/assetUrl.js";
 
 const slides = [
   {
-    src: "/images/carousel/familia-planos.png",
+    src: assetUrl("/images/carousel/familia-planos.png"),
     alt: "A qualidade de vida da sua família está em nossos planos",
     label: "Planos para sua família",
     eyebrow: "MundialCard",
     isBanner: true,
-    to: "/#planos",
+    to: "/",
+    scrollTo: "planos",
   },
   {
-    src: "/images/carousel/colaboradores-planos.png",
+    src: assetUrl("/images/carousel/colaboradores-planos.png"),
     alt: "A qualidade de vida dos seus colaboradores está em nossos planos",
     label: "Planos para colaboradores",
     eyebrow: "MundialCard B2B",
     isBanner: true,
-    to: "/#planos",
+    to: "/",
+    scrollTo: "planos",
   },
   {
     src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1600&q=80",
@@ -106,10 +109,9 @@ export default function HeroCarousel() {
                   className="carousel-slide-link"
                   tabIndex={i === index ? 0 : -1}
                   onClick={() => {
-                    if (slide.to.includes("#")) {
-                      const id = slide.to.split("#")[1];
+                    if (slide.scrollTo) {
                       setTimeout(() => {
-                        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+                        document.getElementById(slide.scrollTo)?.scrollIntoView({ behavior: "smooth" });
                       }, 50);
                     }
                   }}

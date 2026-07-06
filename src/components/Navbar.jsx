@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { contact } from "../data/content";
+import NavClientLogin from "./NavClientLogin";
 
 const links = [
   { to: "/", label: "Início", end: true },
@@ -15,7 +16,15 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     setOpen(false);
@@ -84,9 +93,6 @@ export default function Navbar() {
           <Link to="/cadastro" className="btn btn-primary btn-sm" onClick={closeMenu}>
             Cupom de lançamento
           </Link>
-          <Link to="/area-cliente" className="btn btn-outline btn-sm" onClick={closeMenu}>
-            Área do cliente
-          </Link>
         </div>
       )}
     </>
@@ -94,7 +100,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="navbar">
+      <header className={`navbar${scrolled ? " navbar--scrolled" : ""}`}>
         <div className="navbar-inner">
           <Link to="/" className="brand" onClick={closeMenu}>
             <img src="/logo.svg" alt="MundialCard" />
@@ -105,20 +111,7 @@ export default function Navbar() {
           </nav>
 
           <div className="nav-actions">
-            <a
-              href={contact.whatsappUrl}
-              className="btn btn-ghost btn-sm nav-desktop-only"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp
-            </a>
-            <Link to="/agendamento" className="btn btn-ghost btn-sm nav-desktop-only">
-              Agendar consultas
-            </Link>
-            <Link to="/cadastro" className="btn btn-primary btn-sm nav-desktop-only">
-              Cupom de lançamento
-            </Link>
+            <NavClientLogin />
             <button
               type="button"
               className="nav-toggle"

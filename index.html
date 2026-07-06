@@ -1,7 +1,17 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+    <!-- live-server-redirect -->
+    <script>
+      (function () {
+        var port = location.port;
+        if (port === "5173" || port === "4173" || port === "5500") return;
+        if (/[/\\]dist[/\\]/i.test(location.pathname)) return;
+        location.replace("dist/index.html");
+      })();
+    </script>
+    <!-- /live-server-redirect -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="MundialCard — Seu cartão de super benefícios. Saúde, alimentação, lazer, academia, telemedicina e proteção familiar em um só lugar." />
@@ -17,6 +27,27 @@
   </head>
   <body>
     <div id="root"></div>
+    <div
+      id="site-access-hint"
+      role="alert"
+      hidden
+      style="font-family:system-ui,sans-serif;max-width:28rem;margin:4rem auto;padding:1.5rem;border-radius:12px;background:#fff;border:1px solid rgba(140,20,23,.15);color:#1e293b;line-height:1.6;box-shadow:0 8px 24px rgba(140,20,23,.08)"
+    >
+      <strong style="color:#8c1417">Site não carregou?</strong>
+      Este projeto usa React. Para ver o site completo, execute no terminal:
+      <code style="display:block;margin:.75rem 0;padding:.65rem .85rem;background:#f7f4ee;border-radius:8px;font-size:.9rem">npm start</code>
+      Ou, para desenvolvimento com atualização automática:
+      <code style="display:block;margin:.75rem 0;padding:.65rem .85rem;background:#f7f4ee;border-radius:8px;font-size:.9rem">npm run dev</code>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      setTimeout(function () {
+        var root = document.getElementById("root");
+        var hint = document.getElementById("site-access-hint");
+        if (hint && root && !root.innerHTML.trim()) {
+          hint.hidden = false;
+        }
+      }, 2500);
+    </script>
   </body>
 </html>

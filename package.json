@@ -5,7 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:network": "vite --host",
     "build": "vite build",
+    "build:live": "vite build",
+    "build:watch": "vite build --watch",
+    "start": "npm run build:live && vite preview --port 5500 --open",
+    "start:network": "npm run build:live && vite preview --host --port 5500",
+    "open": "npm run start",
+    "live:server": "npm run build:live && live-server dist --port=5500 --open=index.html --watch=dist",
     "lint": "oxlint",
     "preview": "vite preview"
   },
@@ -18,6 +25,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "live-server": "^1.2.2",
     "oxlint": "^1.71.0",
     "vite": "^8.1.1"
   }

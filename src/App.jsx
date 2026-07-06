@@ -1,7 +1,9 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
+import BackToTopButton from "./components/BackToTopButton";
+import CookieConsent from "./components/CookieConsent";
 import Home from "./pages/Home";
 import Cadastro from "./pages/Cadastro";
 import Dashboard from "./pages/Dashboard";
@@ -11,10 +13,11 @@ import Atendimento from "./pages/Atendimento";
 import Agendamento from "./pages/Agendamento";
 import Produtos from "./pages/Produtos";
 import AppDownload from "./pages/AppDownload";
+import PoliticaCookies from "./pages/PoliticaCookies";
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Navbar />
       <main>
         <Routes>
@@ -27,10 +30,13 @@ export default function App() {
           <Route path="/agendamento" element={<Agendamento />} />
           <Route path="/produtos" element={<Produtos />} />
           <Route path="/app" element={<AppDownload />} />
+          <Route path="/politica-de-cookies" element={<PoliticaCookies />} />
         </Routes>
       </main>
       <Footer />
+      <BackToTopButton />
       <WhatsAppButton />
-    </BrowserRouter>
+      <CookieConsent />
+    </HashRouter>
   );
 }

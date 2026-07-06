@@ -1,0 +1,14 @@
+{
+  "liveServer.settings.root": "/dist",
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.openPreviewTarget": "/index.html",
+  "liveServer.settings.donotShowInfoMsg": true,
+  "liveServer.settings.ignoreFiles": [
+    ".vscode/**",
+    "src/**",
+    "node_modules/**",
+    "docs/**",
+    "scripts/**"
+  ],
+  "liveServer.settings.file": "dist/index.html"
+}

@@ -1,3 +1,5 @@
+import { assetUrl } from "../lib/assetUrl.js";
+
 export const brand = {
   name: "MundialCard",
   slogan: "Seu cartão de super benefícios",
@@ -48,38 +50,36 @@ export const benefits = [
 export const partners = [
   {
     name: "Otorrino MT",
-    logo: "/images/parceiros/parceiro-1.png",
-    url: "https://www.otorrinomt.com.br/site/",
+    logo: assetUrl("/images/parceiros/parceiro-1.png"),
   },
   {
     name: "Hospital Militar de Mato Grosso",
-    logo: "/images/parceiros/parceiro-2.png",
-    url: "#",
+    logo: assetUrl("/images/parceiros/parceiro-2.png"),
   },
   {
     name: "Hospital Ortopédico",
-    logo: "/images/parceiros/parceiro-3.png",
-    url: "http://www.ortopedicomt.com.br/",
+    logo: assetUrl("/images/parceiros/parceiro-3.png"),
   },
   {
     name: "Hospital São Judas Tadeu",
-    logo: "/images/parceiros/parceiro-4.png",
-    url: "https://www.hospitalsaojudas.com.br/",
+    logo: assetUrl("/images/parceiros/parceiro-4.png"),
   },
   {
     name: "Odonto Medicina",
-    logo: "/images/parceiros/parceiro-5.png",
-    url: "https://odontomedicina.com/",
+    logo: assetUrl("/images/parceiros/parceiro-5.png"),
   },
   {
     name: "Usmedic",
-    logo: "/images/parceiros/parceiro-6.png",
-    url: "https://usmedic-cuiaba-clinica-ame.negocio.site/",
+    logo: assetUrl("/images/parceiros/parceiro-6.png"),
   },
   {
     name: "Odonto Medicina",
-    logo: "/images/parceiros/parceiro-7.png",
-    url: "https://odontomedicina.com/",
+    logo: assetUrl("/images/parceiros/parceiro-7.png"),
+  },
+  {
+    name: "Mundial Card — Cartão de Convênio Familiar",
+    logo: assetUrl("/images/parceiros/mundial-card-cartao.png"),
+    brandCard: true,
   },
 ];
 
@@ -177,6 +177,6 @@ export const supportSteps = [
 ];
 
 export const mediaAssets = {
-  app: "/media/mundialcard-app.mp4",
-  institucional: "/media/mundialcard-institucional.mp4",
+  app: assetUrl("/media/mundialcard-app.mp4"),
+  institucional: assetUrl("/media/mundialcard-institucional.mp4"),
 };

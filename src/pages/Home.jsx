@@ -131,9 +131,15 @@ export default function Home() {
               <Link to="/cadastro" className="btn btn-primary">
                 Quero telemedicina no meu plano
               </Link>
-              <a href="#planos" className="btn btn-secondary">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={() =>
+                  document.getElementById("planos")?.scrollIntoView({ behavior: "smooth" })
+                }
+              >
                 Ver planos
-              </a>
+              </button>
               <Link to="/agendamento" className="btn btn-ghost">
                 Agendar consulta
               </Link>
@@ -203,8 +209,6 @@ export default function Home() {
         </div>
       </section>
 
-      <PartnersSection />
-
       <section className="section section-dark" id="jornada">
         <div className="container">
           <div className="section-head">
@@ -232,6 +236,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <PartnersSection />
 
       <section className="section" id="planos">
         <div className="container">
@@ -262,6 +268,38 @@ export default function Home() {
                 </Link>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section section-dark" id="suporte">
+        <div className="container">
+          <div className="section-head">
+            <span className="eyebrow">Segurança operacional</span>
+            <h2 className="section-title">Sistema interno para clientes ativos</h2>
+            <p className="section-lead">
+              Manutenção e gestão centralizadas demonstram solidez: status, histórico, sinistros e
+              suporte rastreável em um só lugar.
+            </p>
+          </div>
+          <div className="grid-3">
+            <article className="feature-card" style={{ background: "rgba(255,255,255,0.06)", color: "#fff", borderColor: "rgba(255,255,255,0.08)" }}>
+              <h3>Gestão de ativos</h3>
+              <p style={{ color: "var(--slate-300)" }}>Cadastro, planos, dependentes e status em tempo real.</p>
+            </article>
+            <article className="feature-card" style={{ background: "rgba(255,255,255,0.06)", color: "#fff", borderColor: "rgba(255,255,255,0.08)" }}>
+              <h3>Atendimento omnichannel</h3>
+              <p style={{ color: "var(--slate-300)" }}>WhatsApp, chat, telefone de sinistro e dashboard interno.</p>
+            </article>
+            <article className="feature-card" style={{ background: "rgba(255,255,255,0.06)", color: "#fff", borderColor: "rgba(255,255,255,0.08)" }}>
+              <h3>Confiança do usuário</h3>
+              <p style={{ color: "var(--slate-300)" }}>Transparência operacional que reduz medo na hora de contratar.</p>
+            </article>
+          </div>
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <Link to="/dashboard" className="btn btn-primary">
+              Ver dashboard
+            </Link>
           </div>
         </div>
       </section>
@@ -330,38 +368,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section section-dark" id="suporte">
-        <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">Segurança operacional</span>
-            <h2 className="section-title">Sistema interno para clientes ativos</h2>
-            <p className="section-lead">
-              Manutenção e gestão centralizadas demonstram solidez: status, histórico, sinistros e
-              suporte rastreável em um só lugar.
-            </p>
-          </div>
-          <div className="grid-3">
-            <article className="feature-card" style={{ background: "rgba(255,255,255,0.06)", color: "#fff", borderColor: "rgba(255,255,255,0.08)" }}>
-              <h3>Gestão de ativos</h3>
-              <p style={{ color: "var(--slate-300)" }}>Cadastro, planos, dependentes e status em tempo real.</p>
-            </article>
-            <article className="feature-card" style={{ background: "rgba(255,255,255,0.06)", color: "#fff", borderColor: "rgba(255,255,255,0.08)" }}>
-              <h3>Atendimento omnichannel</h3>
-              <p style={{ color: "var(--slate-300)" }}>WhatsApp, chat, telefone de sinistro e dashboard interno.</p>
-            </article>
-            <article className="feature-card" style={{ background: "rgba(255,255,255,0.06)", color: "#fff", borderColor: "rgba(255,255,255,0.08)" }}>
-              <h3>Confiança do usuário</h3>
-              <p style={{ color: "var(--slate-300)" }}>Transparência operacional que reduz medo na hora de contratar.</p>
-            </article>
-          </div>
-          <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <Link to="/dashboard" className="btn btn-primary">
-              Ver dashboard
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="section section-cream" id="b2b">
         <div className="container">
           <div className="section-head">
@@ -369,7 +375,7 @@ export default function Home() {
             <h2 className="section-title">Representantes que alavancam a marca</h2>
             <p className="section-lead">
               Captação de empresas, funil de leads e comissionamento com a mesma máquina digital do
-              B2C.
+              B2B.
             </p>
           </div>
           <div className="grid-3">
