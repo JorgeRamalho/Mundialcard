@@ -1,8 +1,10 @@
 ﻿import { useState } from "react";
-import { Link } from "react-router-dom";
+import { AppLink } from "../components/AppLink.jsx";
 import AutoPlayVideo from "../components/AutoPlayVideo";
 import HeroCarousel from "../components/HeroCarousel";
 import LaunchForm from "../components/LaunchForm";
+import RegistrationFormDownload from "../components/RegistrationFormDownload";
+import { homeSectionLink } from "../lib/scrollTo.js";
 import PartnersSection from "../components/PartnersSection";
 import {
   benefits,
@@ -57,12 +59,15 @@ export default function Home() {
                   <li>Disponível para você e sua família conforme o plano</li>
                 </ul>
                 <div className="tele-cta-row">
-                  <Link to="/cadastro" className="btn btn-primary">
-                    Quero aderir com telemedicina
-                  </Link>
-                  <Link to="/agendamento" className="btn btn-ghost">
-                    Simular agendamento
-                  </Link>
+                  <AppLink to="/consulta-digital" className="btn btn-primary">
+                    Iniciar Dr. Digital
+                  </AppLink>
+                  <AppLink to="/cadastro" className="btn btn-gold">
+                    Quero aderir
+                  </AppLink>
+                  <AppLink to="/agendamento" className="btn btn-ghost">
+                    Agendar consulta
+                  </AppLink>
                 </div>
               </div>
             </article>
@@ -87,9 +92,9 @@ export default function Home() {
                 <span className="tele-mini-icon">🎁</span>
                 <h4>Oferta de lançamento</h4>
                 <p>Garanta cupom de inauguração e comece a usar a telemedicina no MundialCard.</p>
-                <Link to="/cadastro" className="btn btn-gold btn-sm">
+                <AppLink to="/cadastro" className="btn btn-gold btn-sm">
                   Pegar meu cupom
-                </Link>
+                </AppLink>
               </article>
             </div>
           </div>
@@ -128,24 +133,18 @@ export default function Home() {
               familiar e super benefícios.
             </p>
             <div className="hero-cta">
-              <Link to="/cadastro" className="btn btn-primary">
+              <AppLink to="/cadastro" className="btn btn-primary">
                 Quero telemedicina no meu plano
-              </Link>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() =>
-                  document.getElementById("planos")?.scrollIntoView({ behavior: "smooth" })
-                }
-              >
+              </AppLink>
+              <AppLink to={homeSectionLink("planos")} className="btn btn-secondary">
                 Ver planos
-              </button>
-              <Link to="/agendamento" className="btn btn-ghost">
+              </AppLink>
+              <AppLink to="/agendamento" className="btn btn-ghost">
                 Agendar consulta
-              </Link>
-              <Link to="/app" className="btn btn-ghost">
+              </AppLink>
+              <AppLink to="/app" className="btn btn-ghost">
                 Baixar app
-              </Link>
+              </AppLink>
             </div>
             <div className="hero-stats">
               <div className="stat-card">
@@ -263,12 +262,14 @@ export default function Home() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <Link to="/cadastro" className={`btn ${plan.featured ? "btn-gold" : "btn-outline"}`}>
+                <AppLink to="/cadastro" className={`btn ${plan.featured ? "btn-gold" : "btn-outline"}`}>
                   Quero este plano + telemedicina
-                </Link>
+                </AppLink>
               </article>
             ))}
           </div>
+
+          <RegistrationFormDownload />
         </div>
       </section>
 
@@ -297,9 +298,9 @@ export default function Home() {
             </article>
           </div>
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <Link to="/dashboard" className="btn btn-primary">
+            <AppLink to="/dashboard" className="btn btn-primary">
               Ver dashboard
-            </Link>
+            </AppLink>
           </div>
         </div>
       </section>
@@ -396,9 +397,9 @@ export default function Home() {
             </article>
           </div>
           <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <Link to="/parceiros" className="btn btn-primary">
+            <AppLink to="/parceiros" className="btn btn-primary">
               Área do parceiro
-            </Link>
+            </AppLink>
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
+import { AppLink } from "../components/AppLink.jsx";
 import { AppShell } from "./Dashboard";
+import RegistrationFormDownload from "../components/RegistrationFormDownload";
 import { benefits, plans } from "../data/content";
 
 export default function Produtos() {
@@ -33,12 +34,13 @@ export default function Produtos() {
                   <li key={item}>{item}</li>
                 ))}
               </ul>
-              <Link to="/cadastro" className="btn btn-outline">
+              <AppLink to="/cadastro" className="btn btn-outline">
                 Contratar
-              </Link>
+              </AppLink>
             </article>
           ))}
         </div>
+        <RegistrationFormDownload variant="panel" showEyebrow={false} />
       </div>
     </AppShell>
   );

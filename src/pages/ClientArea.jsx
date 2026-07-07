@@ -1,9 +1,12 @@
-﻿import { Link } from "react-router-dom";
+﻿import { AppLink } from "../components/AppLink.jsx";
 import AutoPlayVideo from "../components/AutoPlayVideo";
+import MedicalDocumentsGuide from "../components/triage/MedicalDocumentsGuide.jsx";
 import { AppShell } from "./Dashboard";
 import { mediaAssets } from "../data/content";
+import { getTriageSessions } from "../lib/triageSession.js";
 
 export default function ClientArea() {
+  const lastTriage = getTriageSessions()[0];
   return (
     <AppShell title="Área do cliente">
       <div className="grid-2">
@@ -35,12 +38,15 @@ export default function ClientArea() {
             </div>
           </div>
           <div style={{ display: "flex", gap: "0.75rem", marginTop: "1rem", flexWrap: "wrap" }}>
-            <Link to="/agendamento" className="btn btn-primary btn-sm">
+            <AppLink to="/consulta-digital" className="btn btn-primary btn-sm">
+              Dr. Digital
+            </AppLink>
+            <AppLink to="/agendamento" className="btn btn-primary btn-sm">
               Agendar consulta
-            </Link>
-            <Link to="/atendimento" className="btn btn-outline btn-sm">
+            </AppLink>
+            <AppLink to="/atendimento" className="btn btn-outline btn-sm">
               Suporte
-            </Link>
+            </AppLink>
           </div>
         </div>
 
@@ -73,6 +79,41 @@ export default function ClientArea() {
           ))}
         </div>
       </div>
+
+      {lastTriage ? (
+        <div className="panel">
+          <h3>Última triagem — Dr. Digital</h3>
+          <p style={{ color: "var(--slate-600)", fontSize: "0.92rem", marginBottom: "0.5rem" }}>
+            Protocolo <strong>{lastTriage.id}</strong> —{" "}
+            {new Date(lastTriage.createdAt).toLocaleString("pt-BR")}
+          </p>
+          <p style={{ color: "var(--slate-600)", fontSize: "0.92rem" }}>
+            Resultado:{" "}
+            <strong>
+              {lastTriage.result?.blocked
+                ? "Bloqueado — revisão humana"
+                : lastTriage.result?.channel === "ai"
+                  ? "Atendimento IA"
+                  : lastTriage.result?.channel === "human_urgent"
+                    ? "Humano prioritário"
+                    : "Médico humano"}
+            </strong>
+            {lastTriage.temperature != null ? ` · ${lastTriage.temperature.toFixed(1)} °C` : ""}
+          </p>
+          {!lastTriage.complianceBlocked && lastTriage.result && !lastTriage.result.blocked ? (
+            <div style={{ marginTop: "1rem" }}>
+              <MedicalDocumentsGuide
+                sessionData={lastTriage}
+                result={lastTriage.result}
+                sessionId={lastTriage.id}
+              />
+            </div>
+          ) : null}
+          <AppLink to="/consulta-digital" className="btn btn-outline btn-sm" style={{ marginTop: "0.75rem" }}>
+            Nova triagem
+          </AppLink>
+        </div>
+      ) : null}
     </AppShell>
   );
 }

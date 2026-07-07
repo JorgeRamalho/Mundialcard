@@ -1,18 +1,131 @@
-import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { AppLink, AppNavLink } from "./AppLink.jsx";
+import DrDigitalIcon from "./triage/DrDigitalIcon.jsx";
 import { contact } from "../data/content";
+import { homeSectionLink } from "../lib/scrollTo.js";
 import NavClientLogin from "./NavClientLogin";
 
-const links = [
+/** Links do menu desktop (texto limpo). */
+const desktopLinks = [
   { to: "/", label: "Início", end: true },
-  { to: "/#beneficios", label: "Benefícios" },
-  { to: "/#parceiros-rede", label: "Parceiros" },
-  { to: "/#planos", label: "Planos" },
-  { to: "/#telemedicina", label: "Telemedicina" },
-  { to: "/#faq", label: "FAQ" },
+  { to: homeSectionLink("beneficios"), label: "Benefícios", section: true },
+  { to: homeSectionLink("parceiros-rede"), label: "Parceiros", section: true },
+  { to: homeSectionLink("planos"), label: "Planos", section: true },
+  { to: homeSectionLink("telemedicina"), label: "Telemedicina", section: true },
+  { to: homeSectionLink("faq"), label: "FAQ", section: true },
+  { to: "/consulta-digital", label: "Dr. Digital", drDigital: true },
   { to: "/atendimento", label: "Atendimento" },
 ];
+
+/** Menu mobile completo — plano de saúde com emojis e ícones. */
+const mobileNavSections = [
+  {
+    id: "plano",
+    title: "Plano de saúde",
+    icon: "🏥",
+    items: [
+      { to: "/", label: "Início", icon: "🏠", end: true },
+      { to: homeSectionLink("beneficios"), label: "Benefícios", icon: "💊", section: true },
+      { to: homeSectionLink("planos"), label: "Planos", icon: "📋", section: true },
+      { to: homeSectionLink("telemedicina"), label: "Telemedicina", icon: "🩺", section: true },
+      { to: homeSectionLink("parceiros-rede"), label: "Rede credenciada", icon: "🤝", section: true },
+      { to: homeSectionLink("faq"), label: "Dúvidas frequentes", icon: "❓", section: true },
+    ],
+  },
+  {
+    id: "digital",
+    title: "Atendimento digital",
+    icon: "📱",
+    items: [
+      { to: "/consulta-digital", label: "Dr. Digital — triagem", icon: "dr-digital", end: false },
+      { to: "/agendamento", label: "Agendar consulta", icon: "📅" },
+      { to: "/atendimento", label: "Central de atendimento", icon: "💬" },
+      { to: "/area-cliente", label: "Área do cliente", icon: "👤" },
+    ],
+  },
+  {
+    id: "plataforma",
+    title: "Plataforma",
+    icon: "⚙️",
+    items: [
+      { to: "/dashboard", label: "Dashboard operacional", icon: "📊" },
+      { to: "/produtos", label: "Produtos e serviços", icon: "🛒" },
+      { to: "/app", label: "Baixar app", icon: "📲" },
+      { to: "/parceiros", label: "Área do representante", icon: "🧑‍💼" },
+    ],
+  },
+  {
+    id: "institucional",
+    title: "Institucional",
+    icon: "🏛️",
+    items: [
+      { to: "/cadastro", label: "Cupom de inauguração", icon: "🎁" },
+      { to: "/politica-de-cookies", label: "Política de cookies", icon: "🍪" },
+    ],
+  },
+];
+
+const mobileQuickActions = [
+  {
+    href: contact.whatsappUrl,
+    label: "WhatsApp",
+    icon: "💚",
+    external: true,
+    variant: "ghost",
+  },
+  {
+    to: "/cadastro",
+    label: "Cupom de lançamento",
+    icon: "🎟️",
+    variant: "primary",
+  },
+];
+
+function MobileNavIcon({ icon }) {
+  if (icon === "dr-digital") {
+    return (
+      <span className="mobile-nav__icon mobile-nav__icon--svg" aria-hidden="true">
+        <DrDigitalIcon size={28} />
+      </span>
+    );
+  }
+
+  return (
+    <span className="mobile-nav__icon" aria-hidden="true">
+      {icon}
+    </span>
+  );
+}
+
+function MobileNavItem({ item, onClose }) {
+  const content = (
+    <>
+      <MobileNavIcon icon={item.icon} />
+      <span className="mobile-nav__text">{item.label}</span>
+    </>
+  );
+
+  if (item.section) {
+    return (
+      <AppLink to={item.to} onClick={onClose} className="mobile-nav__link">
+        {content}
+      </AppLink>
+    );
+  }
+
+  return (
+    <AppNavLink
+      to={item.to}
+      end={item.end}
+      onClick={onClose}
+      className={({ isActive }) => `mobile-nav__link${isActive ? " active" : ""}`}
+    >
+      {content}
+    </AppNavLink>
+  );
+}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -28,7 +141,7 @@ export default function Navbar() {
 
   useEffect(() => {
     setOpen(false);
-  }, [location.pathname, location.hash]);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -46,25 +159,29 @@ export default function Navbar() {
 
   const closeMenu = () => setOpen(false);
 
-  const handleAnchor = (to) => {
-    closeMenu();
-    if (to.includes("#")) {
-      const id = to.split("#")[1];
-      setTimeout(() => {
-        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-      }, 50);
-    }
-  };
-
-  const renderMenuLinks = (mobileActions = false) => (
+  const renderDesktopLinks = () => (
     <>
-      {links.map((link) =>
-        link.to.includes("#") ? (
-          <Link key={link.to} to={link.to} onClick={() => handleAnchor(link.to)}>
+      {desktopLinks.map((link) =>
+        link.section ? (
+          <AppLink key={link.to} to={link.to} onClick={closeMenu}>
             {link.label}
-          </Link>
+          </AppLink>
+        ) : link.drDigital ? (
+          <AppNavLink
+            key={link.to}
+            to={link.to}
+            end={link.end}
+            onClick={closeMenu}
+            title="Dr. Digital — triagem médica"
+            className={({ isActive }) => `nav-link-dr-digital${isActive ? " active" : ""}`}
+          >
+            <span className="nav-dr-digital__badge" aria-hidden="true">
+              🩺
+            </span>
+            <span className="nav-dr-digital__label">{link.label}</span>
+          </AppNavLink>
         ) : (
-          <NavLink
+          <AppNavLink
             key={link.to}
             to={link.to}
             end={link.end}
@@ -72,29 +189,61 @@ export default function Navbar() {
             className={({ isActive }) => (isActive ? "active" : undefined)}
           >
             {link.label}
-          </NavLink>
+          </AppNavLink>
         )
       )}
+    </>
+  );
 
-      {mobileActions && (
-        <div className="nav-mobile-actions">
-          <a
-            href={contact.whatsappUrl}
-            className="btn btn-ghost btn-sm"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={closeMenu}
-          >
-            WhatsApp
-          </a>
-          <Link to="/agendamento" className="btn btn-ghost btn-sm" onClick={closeMenu}>
-            Agendar consultas
-          </Link>
-          <Link to="/cadastro" className="btn btn-primary btn-sm" onClick={closeMenu}>
-            Cupom de lançamento
-          </Link>
+  const renderMobileMenu = () => (
+    <>
+      <div className="mobile-nav__hero">
+        <DrDigitalIcon size={48} />
+        <div>
+          <strong>MundialCard</strong>
+          <span>Seu cartão de super benefícios</span>
         </div>
-      )}
+      </div>
+
+      {mobileNavSections.map((section) => (
+        <div key={section.id} className="mobile-nav__section">
+          <p className="mobile-nav__group">
+            <span aria-hidden="true">{section.icon}</span>
+            {section.title}
+          </p>
+          {section.items.map((item) => (
+            <MobileNavItem key={`${section.id}-${item.to}`} item={item} onClose={closeMenu} />
+          ))}
+        </div>
+      ))}
+
+      <div className="nav-mobile-actions">
+        {mobileQuickActions.map((action) =>
+          action.external ? (
+            <a
+              key={action.label}
+              href={action.href}
+              className={`btn btn-${action.variant} btn-sm mobile-nav__action`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={closeMenu}
+            >
+              <span aria-hidden="true">{action.icon}</span>
+              {action.label}
+            </a>
+          ) : (
+            <AppLink
+              key={action.label}
+              to={action.to}
+              className={`btn btn-${action.variant} btn-sm mobile-nav__action`}
+              onClick={closeMenu}
+            >
+              <span aria-hidden="true">{action.icon}</span>
+              {action.label}
+            </AppLink>
+          )
+        )}
+      </div>
     </>
   );
 
@@ -102,12 +251,12 @@ export default function Navbar() {
     <>
       <header className={`navbar${scrolled ? " navbar--scrolled" : ""}`}>
         <div className="navbar-inner">
-          <Link to="/" className="brand" onClick={closeMenu}>
+          <AppLink to="/" className="brand" onClick={closeMenu}>
             <img src="/logo.svg" alt="MundialCard" />
-          </Link>
+          </AppLink>
 
           <nav className="nav-links nav-links-desktop" aria-label="Menu principal">
-            {renderMenuLinks(false)}
+            {renderDesktopLinks()}
           </nav>
 
           <div className="nav-actions">
@@ -129,9 +278,9 @@ export default function Navbar() {
         createPortal(
           <div className="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu de navegação">
             <div className="mobile-nav__header">
-              <Link to="/" className="brand" onClick={closeMenu}>
+              <AppLink to="/" className="brand" onClick={closeMenu}>
                 <img src="/logo.svg" alt="MundialCard" />
-              </Link>
+              </AppLink>
               <button
                 type="button"
                 className="mobile-nav__close"
@@ -141,8 +290,8 @@ export default function Navbar() {
                 ✕
               </button>
             </div>
-            <nav className="mobile-nav__panel" aria-label="Menu principal">
-              {renderMenuLinks(true)}
+            <nav className="mobile-nav__panel" aria-label="Menu principal mobile">
+              {renderMobileMenu()}
             </nav>
           </div>,
           document.body

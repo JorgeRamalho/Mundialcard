@@ -1,12 +1,7 @@
-import { Link } from "react-router-dom";
+import { AppLink } from "./AppLink.jsx";
 import { brand, contact } from "../data/content";
 import { assetUrl } from "../lib/assetUrl.js";
-
-function scrollToSection(sectionId) {
-  setTimeout(() => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" });
-  }, 50);
-}
+import { homeSectionLink } from "../lib/scrollTo.js";
 
 export default function Footer() {
   return (
@@ -35,33 +30,26 @@ export default function Footer() {
         </div>
         <div>
           <h4>Produto</h4>
-          <Link to="/" onClick={() => scrollToSection("beneficios")}>
-            Benefícios
-          </Link>
-          <Link to="/" onClick={() => scrollToSection("planos")}>
-            Planos
-          </Link>
-          <Link to="/" onClick={() => scrollToSection("telemedicina")}>
-            Telemedicina
-          </Link>
-          <Link to="/" onClick={() => scrollToSection("parceiros-rede")}>
-            Parceiros
-          </Link>
-          <Link to="/produtos">Produtos e serviços</Link>
+          <AppLink to={homeSectionLink("beneficios")}>Benefícios</AppLink>
+          <AppLink to={homeSectionLink("planos")}>Planos</AppLink>
+          <AppLink to={homeSectionLink("telemedicina")}>Telemedicina</AppLink>
+          <AppLink to={homeSectionLink("parceiros-rede")}>Parceiros</AppLink>
+          <AppLink to="/produtos">Produtos e serviços</AppLink>
         </div>
         <div>
           <h4>Plataforma</h4>
-          <Link to="/dashboard">Dashboard</Link>
-          <Link to="/area-cliente">Área do cliente</Link>
-          <Link to="/parceiros">Área do representante</Link>
-          <Link to="/agendamento">Agendar consulta</Link>
-          <Link to="/app">Baixar app</Link>
+          <AppLink to="/dashboard">Dashboard</AppLink>
+          <AppLink to="/area-cliente">Área do cliente</AppLink>
+          <AppLink to="/parceiros">Área do representante</AppLink>
+          <AppLink to="/consulta-digital">Dr. Digital — triagem</AppLink>
+          <AppLink to="/agendamento">Agendar consulta</AppLink>
+          <AppLink to="/app">Baixar app</AppLink>
         </div>
         <div>
           <h4>Institucional</h4>
-          <Link to="/cadastro">Cupom de inauguração</Link>
-          <Link to="/atendimento">Central de atendimento</Link>
-          <Link to="/politica-de-cookies">Política de cookies</Link>
+          <AppLink to="/cadastro">Cupom de inauguração</AppLink>
+          <AppLink to="/atendimento">Central de atendimento</AppLink>
+          <AppLink to="/politica-de-cookies">Política de cookies</AppLink>
           <a href={contact.whatsappUrl} target="_blank" rel="noopener noreferrer">
             Fale conosco (WhatsApp)
           </a>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { AppLink } from "./AppLink.jsx";
 import { assetUrl } from "../lib/assetUrl.js";
+import { homeSectionLink } from "../lib/scrollTo.js";
 
 const slides = [
   {
@@ -9,8 +10,7 @@ const slides = [
     label: "Planos para sua família",
     eyebrow: "MundialCard",
     isBanner: true,
-    to: "/",
-    scrollTo: "planos",
+    to: homeSectionLink("planos"),
   },
   {
     src: assetUrl("/images/carousel/colaboradores-planos.png"),
@@ -18,8 +18,7 @@ const slides = [
     label: "Planos para colaboradores",
     eyebrow: "MundialCard B2B",
     isBanner: true,
-    to: "/",
-    scrollTo: "planos",
+    to: homeSectionLink("planos"),
   },
   {
     src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1600&q=80",
@@ -104,20 +103,13 @@ export default function HeroCarousel() {
               aria-hidden={i !== index}
             >
               {slide.to ? (
-                <Link
+                <AppLink
                   to={slide.to}
                   className="carousel-slide-link"
                   tabIndex={i === index ? 0 : -1}
-                  onClick={() => {
-                    if (slide.scrollTo) {
-                      setTimeout(() => {
-                        document.getElementById(slide.scrollTo)?.scrollIntoView({ behavior: "smooth" });
-                      }, 50);
-                    }
-                  }}
                 >
                   {content}
-                </Link>
+                </AppLink>
               ) : (
                 content
               )}

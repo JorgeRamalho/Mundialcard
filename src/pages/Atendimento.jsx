@@ -1,17 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import AutoPlayVideo from "../components/AutoPlayVideo";
+import SupportRating from "../components/SupportRating";
 import { AppShell } from "./Dashboard";
 import { contact, faqItems, mediaAssets, supportSteps } from "../data/content";
+import { consumePendingHumanRating, markPendingHumanRating } from "../lib/supportRating";
+import {
+  isSameRoute,
+  pageSectionLink,
+  scrollToElementWithRetry,
+} from "../lib/scrollTo.js";
 
 export default function Atendimento() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [aiReply, setAiReply] = useState("");
+  const [ratingChannel, setRatingChannel] = useState("ia");
+  const [ratingHighlight, setRatingHighlight] = useState(false);
+  const [humanRatingReminder, setHumanRatingReminder] = useState(false);
+
+  useEffect(() => {
+    if (consumePendingHumanRating()) {
+      setRatingChannel("humano");
+      setRatingHighlight(true);
+      setHumanRatingReminder(true);
+    }
+  }, []);
 
   const filtered = faqItems.filter(
     (item) =>
       item.q.toLowerCase().includes(query.toLowerCase()) ||
       item.a.toLowerCase().includes(query.toLowerCase())
   );
+
+  const promptRating = (channel) => {
+    setRatingChannel(channel);
+    setRatingHighlight(true);
+    const target = pageSectionLink("/atendimento", "avaliacao-atendimento");
+    if (isSameRoute(location, target)) {
+      scrollToElementWithRetry("avaliacao-atendimento");
+      return;
+    }
+    navigate(target);
+  };
 
   const askAi = () => {
     if (!query.trim()) {
@@ -28,6 +60,13 @@ export default function Atendimento() {
         ? `Com base na base oficial: ${hit.a} Se ainda precisar, solicite atendimento humano.`
         : "Não encontrei na base. Recomendo assistir aos vídeos explicativos ou acionar um atendente humano."
     );
+    promptRating("ia");
+  };
+
+  const openWhatsApp = () => {
+    markPendingHumanRating();
+    setHumanRatingReminder(true);
+    window.open(contact.whatsappUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -66,27 +105,30 @@ export default function Atendimento() {
             Consultar assistente de IA
           </button>
           {aiReply && (
-            <p
-              style={{
-                marginTop: "1rem",
-                padding: "1rem",
-                borderRadius: 12,
-                background: "var(--cream)",
-                color: "var(--slate-600)",
-              }}
-            >
-              {aiReply}
-            </p>
+            <div className="support-ai-reply">
+              <p>{aiReply}</p>
+              <button
+                type="button"
+                className="btn btn-outline btn-sm"
+                onClick={() => promptRating("ia")}
+              >
+                Avaliar atendimento da IA
+              </button>
+            </div>
           )}
-          <a
-            href={contact.whatsappUrl}
+          <button
+            type="button"
             className="btn btn-outline"
             style={{ marginTop: "0.75rem" }}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={openWhatsApp}
           >
             Falar no WhatsApp
-          </a>
+          </button>
+          {humanRatingReminder ? (
+            <p className="support-rating-reminder" role="status">
+              Ao concluir no WhatsApp, volte aqui e avalie o atendimento humano.
+            </p>
+          ) : null}
         </div>
       </div>
 
@@ -107,6 +149,17 @@ export default function Atendimento() {
             size="panel"
           />
         </div>
+      </div>
+
+      <div className="panel support-rating-panel" id="avaliacao-atendimento">
+        <SupportRating
+          defaultChannel={ratingChannel}
+          highlight={ratingHighlight}
+          onSubmitted={() => {
+            setRatingHighlight(false);
+            setHumanRatingReminder(false);
+          }}
+        />
       </div>
     </AppShell>
   );

@@ -1,4 +1,5 @@
 ﻿import { useState } from "react";
+import { AppLink } from "../components/AppLink.jsx";
 import { AppShell } from "./Dashboard";
 
 const initial = { especialidade: "Clínico geral", data: "", horario: "", observacao: "" };
@@ -77,6 +78,7 @@ export default function Agendamento() {
         <div className="panel">
           <h3>Como funciona</h3>
           <ol style={{ display: "grid", gap: "0.65rem", color: "var(--slate-600)", paddingLeft: "1.1rem" }}>
+            <li>Faça triagem com o <AppLink to="/consulta-digital">Dr. Digital</AppLink> (opcional)</li>
             <li>Escolha especialidade e horário</li>
             <li>Confirme na plataforma</li>
             <li>Receba o link da consulta</li>

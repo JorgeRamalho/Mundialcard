@@ -153,7 +153,7 @@ export const faqItems = [
   },
   {
     q: "Quando devo acionar a IA ou um atendente humano?",
-    a: "Primeiro consulte a base de vídeos, áudios e FAQ. Se a dúvida permanecer, a IA orienta o próximo passo. Casos sensíveis ou sinistros seguem direto para atendimento humano prioritário.",
+    a: "Primeiro consulte a base de vídeos, áudios e FAQ. Se a dúvida permanecer, a IA orienta o próximo passo. Casos sensíveis ou sinistros seguem direto para atendimento humano prioritário. Ao final, em ambos os casos, solicitamos sua avaliação do atendimento.",
   },
   {
     q: "Como funciona o canal B2B com representantes?",
@@ -174,9 +174,58 @@ export const supportSteps = [
   "Assistente de IA orienta o próximo passo",
   "Atendimento humano quando necessário",
   "Sistema interno registra e resolve",
+  "Avaliação do atendimento (IA ou humano)",
 ];
+
+/** Avaliação de suporte — site e referência para fluxo WhatsApp */
+export const supportRating = {
+  title: "Como foi seu atendimento?",
+  subtitle:
+    "Sua avaliação é solicitada ao final de todo atendimento — seja pela IA ou por um atendente humano.",
+  channels: [
+    { id: "ia", label: "Assistente virtual (IA)" },
+    { id: "humano", label: "Atendente humano (WhatsApp / telefone)" },
+  ],
+  whatsapp: {
+    alwaysAsk: true,
+    prompt:
+      "Antes de encerrar, gostaríamos de saber: *como foi seu atendimento hoje?* Responda com uma nota de *1 a 5* (1 = péssimo, 5 = excelente).",
+    followUp:
+      "Obrigado! Sua avaliação foi registrada e nos ajuda a melhorar o suporte MundialCard. Posso ajudar em mais alguma coisa?",
+    options: [
+      { score: 1, label: "1 — Péssimo" },
+      { score: 2, label: "2 — Ruim" },
+      { score: 3, label: "3 — Regular" },
+      { score: 4, label: "4 — Bom" },
+      { score: 5, label: "5 — Excelente" },
+    ],
+    commentPrompt: "Quer deixar um comentário sobre o atendimento? (opcional)",
+    channelLabels: {
+      ia: "Assistente virtual (IA)",
+      humano: "Atendente humano",
+    },
+  },
+};
 
 export const mediaAssets = {
   app: assetUrl("/media/mundialcard-app.mp4"),
   institucional: assetUrl("/media/mundialcard-institucional.mp4"),
+};
+
+/** Ficha de cadastro — Cartão de Convênio Familiar (PDF editável, hospedado no site) */
+export const registrationForm = {
+  title: "Ficha de cadastro — Cartão de Convênio Familiar",
+  description:
+    "Baixe o contrato em PDF, preencha os dados do titular e dependentes e envie para concluir sua adesão ao plano escolhido.",
+  fileName: "Contrato-MundialCard-PF-2024.pdf",
+  url: assetUrl("/documents/ficha-cadastro-convenio-familiar.pdf"),
+  mimeType: "application/pdf",
+  sizeLabel: "822 KB",
+  trustPoints: [
+    "Download seguro direto do site oficial MundialCard",
+    "Arquivo PDF padrão — sem programas, instalação ou executáveis",
+    "Abra com o leitor de PDF do celular, tablet ou computador",
+  ],
+  trustNote:
+    "Documento estático em PDF verificado. Em produção, a transferência ocorre por HTTPS com tipo de arquivo declarado pelo servidor.",
 };

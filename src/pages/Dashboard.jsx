@@ -1,10 +1,11 @@
-﻿import { Link, NavLink } from "react-router-dom";
+﻿import { AppLink, AppNavLink } from "../components/AppLink.jsx";
 
 const links = [
   { to: "/dashboard", label: "Visão geral", end: true },
   { to: "/area-cliente", label: "Área do cliente" },
   { to: "/parceiros", label: "Parceiros B2B" },
   { to: "/atendimento", label: "Atendimento" },
+  { to: "/consulta-digital", label: "Dr. Digital" },
   { to: "/agendamento", label: "Agendamentos" },
   { to: "/produtos", label: "Produtos" },
   { to: "/app", label: "App" },
@@ -16,18 +17,18 @@ export function AppShell({ title, children }) {
       <aside className="sidebar">
         <h2>Plataforma MundialCard</h2>
         {links.map((link) => (
-          <NavLink
+          <AppNavLink
             key={link.to}
             to={link.to}
             end={link.end}
             className={({ isActive }) => (isActive ? "active" : undefined)}
           >
             {link.label}
-          </NavLink>
+          </AppNavLink>
         ))}
-        <Link to="/cadastro" className="btn btn-primary btn-sm" style={{ marginTop: "1rem" }}>
+        <AppLink to="/cadastro" className="btn btn-primary btn-sm" style={{ marginTop: "1rem" }}>
           Novo lead
-        </Link>
+        </AppLink>
       </aside>
       <main className="app-main">
         <h1

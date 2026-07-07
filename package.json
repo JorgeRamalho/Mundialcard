@@ -1,11 +1,13 @@
-﻿{
+{
   "name": "MundialCard",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:network": "vite --host",
+    "dev:network": "vite --host 0.0.0.0",
+    "dev:https": "node scripts/dev-https.mjs",
+    "dev:test": "node scripts/dev-test.mjs",
     "build": "vite build",
     "build:live": "vite build",
     "build:watch": "vite build --watch",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-basic-ssl": "^2.3.0",
     "@vitejs/plugin-react": "^6.0.3",
     "live-server": "^1.2.2",
     "oxlint": "^1.71.0",

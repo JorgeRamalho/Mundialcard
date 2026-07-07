@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getSectionFromSearch, scrollToTop } from "../lib/scrollTo.js";
 
 export default function BackToTopButton() {
   const [visible, setVisible] = useState(false);
@@ -11,15 +12,17 @@ export default function BackToTopButton() {
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [location.pathname, location.search, location.hash]);
 
   const goToTop = () => {
-    if (location.pathname !== "/") {
+    const section = getSectionFromSearch(location.search);
+
+    if (location.pathname === "/" && section) {
       navigate("/");
-      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 80);
       return;
     }
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    scrollToTop("smooth");
   };
 
   return (
@@ -27,8 +30,8 @@ export default function BackToTopButton() {
       type="button"
       className={`back-to-top${visible ? " is-visible" : ""}`}
       onClick={goToTop}
-      aria-label="Voltar ao topo"
-      title="Voltar ao topo"
+      aria-label="Voltar ao topo desta página"
+      title="Voltar ao topo desta página"
     >
       <span aria-hidden="true">↑</span>
     </button>

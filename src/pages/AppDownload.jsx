@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+﻿import { AppLink } from "../components/AppLink.jsx";
 import AutoPlayVideo from "../components/AutoPlayVideo";
 import { mediaAssets } from "../data/content";
 
@@ -30,13 +30,13 @@ export default function AppDownload() {
               <button type="button" className="btn btn-outline">
                 Google Play
               </button>
-              <Link
+              <AppLink
                 to="/area-cliente"
                 className="btn btn-ghost"
                 style={{ color: "var(--navy-900)", borderColor: "rgba(10,22,40,.15)" }}
               >
                 Abrir área web
-              </Link>
+              </AppLink>
             </div>
           </div>
           <AutoPlayVideo

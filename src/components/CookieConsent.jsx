@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { AppLink } from "./AppLink.jsx";
 import { defaultPreferences, getStoredConsent, saveConsent } from "../lib/cookieConsent";
 
 const CATEGORIES = [
@@ -107,9 +107,9 @@ export default function CookieConsent() {
                 <strong>aceitar</strong>, <strong>recusar</strong> os opcionais ou{" "}
                 <strong>configurar</strong> o que autoriza — e alterar isso quando quiser.
               </p>
-              <Link className="cookie-banner__link" to="/politica-de-cookies">
+              <AppLink className="cookie-banner__link" to="/politica-de-cookies">
                 Política de cookies
-              </Link>
+              </AppLink>
             </div>
             <div className="cookie-banner__actions">
               <button type="button" className="btn btn-outline btn-sm" onClick={refuseOptional}>

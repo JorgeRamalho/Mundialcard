@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { AppLink } from "../components/AppLink.jsx";
 import { brand, contact } from "../data/content";
 
 const sections = [
@@ -99,9 +99,9 @@ export default function PoliticaCookies() {
             <button type="button" className="btn btn-primary" onClick={openPrefs}>
               Gerenciar preferências de cookies
             </button>
-            <Link to="/" className="btn btn-outline">
+            <AppLink to="/" className="btn btn-outline">
               Voltar ao início
-            </Link>
+            </AppLink>
           </div>
         </div>
       </section>

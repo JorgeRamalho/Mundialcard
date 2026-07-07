@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { AppLink } from "./AppLink.jsx";
 import {
   clearClientSession,
   getClientSession,
@@ -48,12 +49,12 @@ function LoginFields({ username, password, onUsername, onPassword, error, onLink
         <button type="submit" className="btn btn-primary btn-sm btn-block">
           Entrar
         </button>
-        <Link to="/cadastro" className="btn btn-outline btn-sm btn-block" onClick={handleLink}>
+        <AppLink to="/cadastro" className="btn btn-outline btn-sm btn-block" onClick={handleLink}>
           Cadastrar
-        </Link>
-        <Link to="/atendimento" className="nav-client-login__help" onClick={handleLink}>
+        </AppLink>
+        <AppLink to="/atendimento" className="nav-client-login__help" onClick={handleLink}>
           Esqueci minha senha
-        </Link>
+        </AppLink>
       </div>
     </>
   );
@@ -146,14 +147,14 @@ export default function NavClientLogin() {
       {panelOpen && session && (
         <div className="nav-client-login__panel" role="menu">
           <p className="nav-client-login__panel-greet">Bem-vindo de volta</p>
-          <Link
+          <AppLink
             to="/area-cliente"
             className="btn btn-primary btn-sm btn-block"
             role="menuitem"
             onClick={closePanel}
           >
             Área do cliente
-          </Link>
+          </AppLink>
           <button
             type="button"
             className="btn btn-outline btn-sm btn-block"
