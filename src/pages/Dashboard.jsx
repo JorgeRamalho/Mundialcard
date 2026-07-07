@@ -1,4 +1,8 @@
-﻿import { AppLink, AppNavLink } from "../components/AppLink.jsx";
+﻿import { useEffect, useState } from "react";
+import { AppLink, AppNavLink } from "../components/AppLink.jsx";
+import PieChart from "../components/PieChart.jsx";
+import { fetchDashboardData } from "../lib/api/dashboard.js";
+import { isSupabaseConfigured } from "../lib/supabase.js";
 
 const links = [
   { to: "/dashboard", label: "Visão geral", end: true },
@@ -47,87 +51,131 @@ export function AppShell({ title, children }) {
 }
 
 export default function Dashboard() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+
+    fetchDashboardData().then((result) => {
+      if (active) {
+        setData(result);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (loading || !data) {
+    return (
+      <AppShell title="Dashboard operacional">
+        <p style={{ color: "var(--slate-500)" }}>Carregando indicadores...</p>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell title="Dashboard operacional">
+      {isSupabaseConfigured() ? (
+        <p className="db-status db-status--online" style={{ marginBottom: "1rem" }}>
+          Banco conectado — fonte: {data.source}
+        </p>
+      ) : (
+        <p className="db-status db-status--local" style={{ marginBottom: "1rem" }}>
+          Modo demonstração (local) — configure o Supabase em `.env.local`
+        </p>
+      )}
+
       <div className="dash-grid">
         <div className="kpi">
           <span>Clientes ativos</span>
-          <strong>1.284</strong>
+          <strong>{data.kpis.clientes_ativos}</strong>
         </div>
         <div className="kpi">
           <span>Leads do mês</span>
-          <strong>326</strong>
+          <strong>{data.kpis.leads_mes}</strong>
         </div>
         <div className="kpi">
           <span>Tickets abertos</span>
-          <strong>18</strong>
+          <strong>{data.kpis.tickets_abertos}</strong>
         </div>
         <div className="kpi">
           <span>Consultas agendadas</span>
-          <strong>47</strong>
+          <strong>{data.kpis.consultas_agendadas}</strong>
         </div>
       </div>
 
-      <div className="panel">
-        <h3>Clientes ativos no sistema interno</h3>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Plano</th>
-              <th>Cidade</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Ana Souza</td>
-              <td>Ouro</td>
-              <td>São Paulo</td>
-              <td>
-                <span className="badge badge-ok">Ativo</span>
-              </td>
-            </tr>
-            <tr>
-              <td>Carlos Lima</td>
-              <td>Prata</td>
-              <td>Recife</td>
-              <td>
-                <span className="badge badge-ok">Ativo</span>
-              </td>
-            </tr>
-            <tr>
-              <td>Empresa Norte Ltda</td>
-              <td>Platinum B2B</td>
-              <td>Manaus</td>
-              <td>
-                <span className="badge badge-warn">Onboarding</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div className="dash-body">
+        <div className="dash-body__main">
+          <div className="panel">
+            <h3>Clientes ativos no sistema interno</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Plano</th>
+                  <th>Cidade</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.clients.map((client) => (
+                  <tr key={`${client.name}-${client.city}`}>
+                    <td>{client.name}</td>
+                    <td>{client.plan}</td>
+                    <td>{client.city}</td>
+                    <td>
+                      <span className={client.badge.className}>{client.badge.label}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-      <div className="panel">
-        <h3>Funil de venda digital</h3>
-        <div className="grid-4">
-          <div className="kpi">
-            <span>Interesse</span>
-            <strong>820</strong>
-          </div>
-          <div className="kpi">
-            <span>Educação (vídeo/FAQ)</span>
-            <strong>510</strong>
-          </div>
-          <div className="kpi">
-            <span>Contratação</span>
-            <strong>190</strong>
-          </div>
-          <div className="kpi">
-            <span>Kit enviado</span>
-            <strong>176</strong>
+          <div className="panel">
+            <h3>Funil de venda digital</h3>
+            <div className="grid-4">
+              <div className="kpi">
+                <span>Interesse</span>
+                <strong>{data.funnel.interesse}</strong>
+              </div>
+              <div className="kpi">
+                <span>Educação (vídeo/FAQ)</span>
+                <strong>{data.funnel.educacao}</strong>
+              </div>
+              <div className="kpi">
+                <span>Contratação</span>
+                <strong>{data.funnel.contratacao}</strong>
+              </div>
+              <div className="kpi">
+                <span>Kit enviado</span>
+                <strong>{data.funnel.kit}</strong>
+              </div>
+            </div>
           </div>
         </div>
+
+        <aside className="dash-body__charts" aria-label="Indicadores visuais">
+          <div className="dash-charts-head">
+            <h3>Análise visual</h3>
+            <p>Distribuição operacional em tempo real</p>
+          </div>
+          <div className="dash-charts-stack">
+            {data.charts.map((chart) => (
+              <PieChart
+                key={chart.id}
+                title={chart.title}
+                subtitle={chart.subtitle}
+                segments={chart.segments}
+                centerLabel={chart.centerLabel}
+              />
+            ))}
+          </div>
+        </aside>
       </div>
     </AppShell>
   );

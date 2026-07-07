@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { createLead } from "../lib/api/leads.js";
 
 const initial = {
   nome: "",
@@ -24,38 +26,41 @@ function validate(values) {
   return errors;
 }
 
-function makeCoupon(nome) {
-  const prefix = nome.trim().split(" ")[0].slice(0, 4).toUpperCase();
-  const code = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return `MUND-${prefix}${code}`;
-}
-
 export default function LaunchForm({ compact = false }) {
+  const [searchParams] = useSearchParams();
+  const referralCode = searchParams.get("ref") || "";
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState({});
   const [coupon, setCoupon] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length) return;
 
-    const entry = {
-      ...values,
-      coupon: makeCoupon(values.nome),
-      createdAt: new Date().toISOString(),
-    };
+    setSaving(true);
+    setSubmitError("");
 
-    const list = JSON.parse(localStorage.getItem("mundialcard_leads") || "[]");
-    list.push(entry);
-    localStorage.setItem("mundialcard_leads", JSON.stringify(list));
-    setCoupon(entry.coupon);
+    try {
+      const result = await createLead(values, { referralCode });
+      if (!result.ok) {
+        setSubmitError("Não foi possível salvar o cadastro. Tente novamente.");
+        return;
+      }
+      setCoupon(result.coupon);
+    } catch {
+      setSubmitError("Erro de conexão. Tente novamente em instantes.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (coupon) {
@@ -85,6 +90,12 @@ export default function LaunchForm({ compact = false }) {
           </p>
         </>
       )}
+
+      {referralCode ? (
+        <p className="db-status db-status--online" style={{ marginBottom: "1rem" }} role="status">
+          Indicação do parceiro <strong>{referralCode.toUpperCase()}</strong> registrada neste cadastro.
+        </p>
+      ) : null}
 
       <div className="form-grid">
         <div className="form-field full">
@@ -143,8 +154,19 @@ export default function LaunchForm({ compact = false }) {
         </div>
       </div>
 
-      <button type="submit" className="btn btn-primary btn-block" style={{ marginTop: "1.25rem" }}>
-        Quero meu cupom de inauguração
+      {submitError ? (
+        <p className="error" style={{ marginTop: "0.75rem" }} role="alert">
+          {submitError}
+        </p>
+      ) : null}
+
+      <button
+        type="submit"
+        className="btn btn-primary btn-block"
+        style={{ marginTop: "1.25rem" }}
+        disabled={saving}
+      >
+        {saving ? "Salvando..." : "Quero meu cupom de inauguração"}
       </button>
     </form>
   );

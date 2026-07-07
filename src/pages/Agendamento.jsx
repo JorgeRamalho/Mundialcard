@@ -1,19 +1,23 @@
 ﻿import { useState } from "react";
 import { AppLink } from "../components/AppLink.jsx";
 import { AppShell } from "./Dashboard";
+import { createAppointment } from "../lib/api/appointments.js";
+import { getProfileId } from "../lib/clientSession.js";
 
 const initial = { especialidade: "Clínico geral", data: "", horario: "", observacao: "" };
 
 export default function Agendamento() {
   const [form, setForm] = useState(initial);
   const [ok, setOk] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.data || !form.horario) return;
-    const list = JSON.parse(localStorage.getItem("mundialcard_appointments") || "[]");
-    list.push({ ...form, createdAt: new Date().toISOString() });
-    localStorage.setItem("mundialcard_appointments", JSON.stringify(list));
+
+    setSaving(true);
+    await createAppointment(form, getProfileId());
+    setSaving(false);
     setOk(true);
   };
 
@@ -68,8 +72,8 @@ export default function Agendamento() {
                   placeholder="Descreva brevemente o motivo"
                 />
               </div>
-              <button type="submit" className="btn btn-primary">
-                Confirmar agendamento
+              <button type="submit" className="btn btn-primary" disabled={saving}>
+                {saving ? "Salvando..." : "Confirmar agendamento"}
               </button>
             </>
           )}
@@ -78,7 +82,9 @@ export default function Agendamento() {
         <div className="panel">
           <h3>Como funciona</h3>
           <ol style={{ display: "grid", gap: "0.65rem", color: "var(--slate-600)", paddingLeft: "1.1rem" }}>
-            <li>Faça triagem com o <AppLink to="/consulta-digital">Dr. Digital</AppLink> (opcional)</li>
+            <li>
+              Faça triagem com o <AppLink to="/consulta-digital">Dr. Digital</AppLink> (opcional)
+            </li>
             <li>Escolha especialidade e horário</li>
             <li>Confirme na plataforma</li>
             <li>Receba o link da consulta</li>

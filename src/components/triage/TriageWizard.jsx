@@ -99,7 +99,7 @@ export default function TriageWizard() {
     setComplianceBlock(null);
     setStepIndex(STEPS.findIndex((item) => item.id === "analysis"));
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const violation = scanForComplianceViolations(data);
 
       if (violation.blocked) {
@@ -120,7 +120,7 @@ export default function TriageWizard() {
           flags: violation.flags,
           confidence: 0,
         });
-        saveTriageSession({
+        await saveTriageSession({
           ...data,
           complianceBlocked: true,
           auditId: audit.id,
@@ -138,7 +138,7 @@ export default function TriageWizard() {
         triageLevel: triage.level,
         channel: triage.channel,
       });
-      const saved = saveTriageSession({
+      const saved = await saveTriageSession({
         ...data,
         auditId: audit.id,
         complianceBlocked: false,

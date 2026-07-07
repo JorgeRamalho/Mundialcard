@@ -1,4 +1,5 @@
-﻿import { AppLink } from "../components/AppLink.jsx";
+﻿import { useEffect, useState } from "react";
+import { AppLink } from "../components/AppLink.jsx";
 import AutoPlayVideo from "../components/AutoPlayVideo";
 import MedicalDocumentsGuide from "../components/triage/MedicalDocumentsGuide.jsx";
 import { AppShell } from "./Dashboard";
@@ -6,7 +7,17 @@ import { mediaAssets } from "../data/content";
 import { getTriageSessions } from "../lib/triageSession.js";
 
 export default function ClientArea() {
-  const lastTriage = getTriageSessions()[0];
+  const [lastTriage, setLastTriage] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+    getTriageSessions().then((sessions) => {
+      if (active) setLastTriage(sessions[0] ?? null);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
   return (
     <AppShell title="Área do cliente">
       <div className="grid-2">

@@ -1,24 +1,66 @@
-﻿import { AppShell } from "./Dashboard";
+﻿import { useEffect, useState } from "react";
+import { AppShell } from "./Dashboard";
+import { fetchPartnerDashboard } from "../lib/api/partners.js";
+import { isSupabaseConfigured } from "../lib/supabase.js";
 
 export default function PartnerArea() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+
+    const params = new URLSearchParams(window.location.hash.split("?")[1] || "");
+    const ref = params.get("ref") || "REP-2048";
+
+    fetchPartnerDashboard(ref).then((result) => {
+      if (active) {
+        setData(result);
+        setLoading(false);
+      }
+    });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (loading || !data) {
+    return (
+      <AppShell title="Área do parceiro / representante">
+        <p style={{ color: "var(--slate-500)" }}>Carregando área do parceiro...</p>
+      </AppShell>
+    );
+  }
+
   return (
     <AppShell title="Área do parceiro / representante">
+      {isSupabaseConfigured() ? (
+        <p className="db-status db-status--online" style={{ marginBottom: "1rem" }}>
+          Banco conectado — {data.company_name}
+        </p>
+      ) : (
+        <p className="db-status db-status--local" style={{ marginBottom: "1rem" }}>
+          Modo demonstração (local)
+        </p>
+      )}
+
       <div className="dash-grid">
         <div className="kpi">
           <span>Leads captados</span>
-          <strong>84</strong>
+          <strong>{data.kpis.leads}</strong>
         </div>
         <div className="kpi">
           <span>Contratos fechados</span>
-          <strong>19</strong>
+          <strong>{data.kpis.contratos}</strong>
         </div>
         <div className="kpi">
           <span>Vidas ativas</span>
-          <strong>146</strong>
+          <strong>{data.kpis.vidas}</strong>
         </div>
         <div className="kpi">
           <span>Comissão do mês</span>
-          <strong>R$ 3.2k</strong>
+          <strong>{data.kpis.comissao}</strong>
         </div>
       </div>
 
@@ -35,9 +77,10 @@ export default function PartnerArea() {
             borderRadius: 12,
             background: "var(--cream)",
             fontWeight: 700,
+            wordBreak: "break-all",
           }}
         >
-          https://mundialcard.app/r/REP-2048
+          {data.referralLink}
         </code>
       </div>
 
@@ -53,30 +96,18 @@ export default function PartnerArea() {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>Tech Sul RH</td>
-              <td>Educação</td>
-              <td>Premium</td>
-              <td>
-                <span className="badge badge-warn">Em andamento</span>
-              </td>
-            </tr>
-            <tr>
-              <td>Mercado Central</td>
-              <td>Fechamento</td>
-              <td>Ouro</td>
-              <td>
-                <span className="badge badge-ok">Proposta enviada</span>
-              </td>
-            </tr>
-            <tr>
-              <td>Associação Norte</td>
-              <td>Kit enviado</td>
-              <td>Platinum</td>
-              <td>
-                <span className="badge badge-ok">Ativo</span>
-              </td>
-            </tr>
+            {data.pipeline.map((row) => (
+              <tr key={`${row.company_name}-${row.stage}`}>
+                <td>{row.company_name}</td>
+                <td>{row.stage}</td>
+                <td>{row.plan_name}</td>
+                <td>
+                  <span className={row.badge?.className || "badge badge-warn"}>
+                    {row.badge?.label || row.status}
+                  </span>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

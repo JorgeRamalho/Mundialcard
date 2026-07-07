@@ -9,6 +9,18 @@ import {
 
 const USER_EMOJI = "👤";
 
+function NavUserIcon() {
+  return (
+    <svg className="nav-client-login__svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="8.25" r="3.35" fill="currentColor" />
+      <path
+        fill="currentColor"
+        d="M5.5 19.1c0-2.9 2.55-5.25 6.5-5.25s6.5 2.35 6.5 5.25V20H5.5v-.9Z"
+      />
+    </svg>
+  );
+}
+
 function LoginFields({ username, password, onUsername, onPassword, error, onLinkClick }) {
   const handleLink = () => onLinkClick?.();
 
@@ -46,8 +58,8 @@ function LoginFields({ username, password, onUsername, onPassword, error, onLink
         </p>
       )}
       <div className="nav-client-login__actions">
-        <button type="submit" className="btn btn-primary btn-sm btn-block">
-          Entrar
+        <button type="submit" className="btn btn-primary btn-sm btn-block" disabled={loading}>
+          {loading ? "Entrando..." : "Entrar"}
         </button>
         <AppLink to="/cadastro" className="btn btn-outline btn-sm btn-block" onClick={handleLink}>
           Cadastrar
@@ -68,6 +80,7 @@ export default function NavClientLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const sync = () => setSession(getClientSession());
@@ -100,11 +113,14 @@ export default function NavClientLogin() {
     closePanel();
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     setError("");
+    setLoading(true);
 
-    const result = loginClient(username, password);
+    const result = await loginClient(username, password);
+    setLoading(false);
+
     if (!result.ok) {
       setError(result.message);
       return;
@@ -116,8 +132,8 @@ export default function NavClientLogin() {
     navigate("/area-cliente");
   };
 
-  const handleLogout = () => {
-    clearClientSession();
+  const handleLogout = async () => {
+    await clearClientSession();
     setSession(null);
     setUsername("");
     setPassword("");
@@ -139,7 +155,7 @@ export default function NavClientLogin() {
         onClick={() => setPanelOpen((open) => !open)}
       >
         <span className="nav-client-login__icon" aria-hidden="true">
-          {USER_EMOJI}
+          <NavUserIcon />
         </span>
         <span className="nav-client-login__label-text">{triggerLabel}</span>
       </button>

@@ -1,11 +1,14 @@
+import { useEffect } from "react";
 import { HashRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ScrollManager from "./components/ScrollManager";
 import WhatsAppButton from "./components/WhatsAppButton";
 import BackToTopButton from "./components/BackToTopButton";
+import PageWayfinding from "./components/PageWayfinding.jsx";
 import CookieConsent from "./components/CookieConsent";
 import DevAccessBar from "./components/DevAccessBar.jsx";
+import { initAuth } from "./lib/clientSession.js";
 import Home from "./pages/Home";
 import Cadastro from "./pages/Cadastro";
 import Dashboard from "./pages/Dashboard";
@@ -19,10 +22,15 @@ import ConsultaDigital from "./pages/ConsultaDigital";
 import PoliticaCookies from "./pages/PoliticaCookies";
 
 export default function App() {
+  useEffect(() => {
+    initAuth();
+  }, []);
+
   return (
     <HashRouter>
       <ScrollManager />
       <Navbar />
+      <PageWayfinding />
       <main>
         <Routes>
           <Route path="/" element={<Home />} />

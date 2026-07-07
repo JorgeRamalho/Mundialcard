@@ -23,14 +23,14 @@ export default function SupportRating({
   const activeScore = hoverScore || score;
   const activeLabel = activeScore ? SCORE_LABELS[activeScore - 1] : null;
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault();
     if (!score) {
       setError("Selecione uma nota de 1 a 5 estrelas.");
       return;
     }
 
-    saveSupportRating({ channel, score, comment, context: "atendimento" });
+    await saveSupportRating({ channel, score, comment, context: "atendimento" });
     setSubmitted(true);
     setError("");
     onSubmitted?.({ channel, score });
