@@ -78,11 +78,11 @@ function pdfDownloadHeaders() {
     name: "pdf-download-headers",
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        if (req.url?.includes(".pdf")) {
+        if (req.url?.includes("ficha-cadastro-convenio-familiar.pdf")) {
           res.setHeader("Content-Type", "application/pdf");
           res.setHeader(
             "Content-Disposition",
-            'attachment; filename="Contrato-MundialCard-PF-2024.pdf"'
+            'attachment; filename="ficha-cadastro-convenio-familiar.pdf"'
           );
           res.setHeader("X-Content-Type-Options", "nosniff");
         }

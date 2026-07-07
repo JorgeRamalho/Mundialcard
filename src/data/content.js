@@ -217,7 +217,7 @@ export const registrationForm = {
   title: "Ficha de cadastro — Cartão de Convênio Familiar",
   description:
     "Baixe o contrato em PDF, preencha os dados do titular e dependentes e envie para concluir sua adesão ao plano escolhido.",
-  fileName: "Contrato-MundialCard-PF-2024.pdf",
+  fileName: "ficha-cadastro-convenio-familiar.pdf",
   url: assetUrl("/documents/ficha-cadastro-convenio-familiar.pdf"),
   mimeType: "application/pdf",
   sizeLabel: "822 KB",
